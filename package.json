@@ -1,0 +1,13 @@
+{
+  "name": "miro-dice",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start-tls": "http-server -S -C .meta/cert.pem -K .meta/key.pem public",
+    "start": "http-server public"
+  },
+  "devDependencies": {
+    "http-server": "^0.12.3"
+  }
+}

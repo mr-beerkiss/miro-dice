@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      html,
+      body {
+        margin: 0px;
+        background-color: #20262e;
+      }
+
+      .display {
+        width: 90px;
+        height: 90px;
+        margin: 0px auto 0px auto;
+        padding: 10px 0px 10px 0px;
+
+        font-family: Comic Sans MS;
+        font-size: 20px;
+        color: #fff;
+        cursor: default;
+        text-align: center;
+        line-height: 40px;
+        border-radius: 10px;
+        cursor: default;
+      }
+
+      .symbol {
+        width: 90px;
+        height: 50px;
+        float: left;
+        overflow: hidden;
+      }
+
+      .cur,
+      .old {
+        width: 92%;
+        height: 40px;
+        float: left;
+        background-color: #3f51b5;
+        border-radius: 3px;
+        margin: 5px 1px;
+        transform: translateY(-50px);
+        box-shadow: inset 1px 1px 3px 0px rgba(255, 255, 255, 0.5);
+      }
+      .symbol.anim div {
+        transform: translateY(0px);
+        transition: transform 0.35s ease-in-out;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="display" id="a">
+      <div class="symbol">
+        <div class="cur"></div>
+        <div class="old"></div>
+      </div>
+    </div>
+    <script>
+      const rollFn = (dieSides = 6) => () =>
+        1 + Math.floor(Math.random() * dieSides);
+
+      const last = (arr) => arr[arr.length - 1];
+
+      function rollSequence(dieSides = 6, minRolls = 5, maxRolls = 10) {
+        const amtRolls = 1 + Math.floor(Math.random() * maxRolls) + minRolls;
+        const roll = rollFn(dieSides);
+        const seq = [roll()];
+
+        while (seq.length < amtRolls) {
+          const next = roll();
+          if (next != last(seq)) {
+            seq.push(next);
+          }
+        }
+
+        return seq;
+      }
+      function countdown(elements, displayElem, onTimerEnd = null) {
+        console.log(`Sequence = ${elements.join(",")}`);
+        let index = 0;
+        let timer = setInterval(function () {
+          if (index + 2 >= elements.length) {
+            clearInterval(timer); // stop timer
+            if (onTimerEnd) {
+              onTimerEnd(); // run callback
+            }
+          }
+          updateDisplay(elements[index], elements[index + 1]);
+          index += 1;
+        }, 500);
+
+        function updateDisplay(currentValue, newValue) {
+          const sym = displayElem.querySelector(".symbol .cur");
+          if (currentValue !== newValue) {
+            // animated change
+            let parent = sym.parentNode;
+            parent.classList.remove("anim");
+            sym.textContent = newValue;
+            sym.nextElementSibling.textContent = currentValue;
+            var foo = parent.offsetWidth; // reflow hack
+            parent.classList.add("anim");
+          }
+        }
+      }
+
+      countdown(rollSequence(), document.getElementById("a"));
+    </script>
+  </body>
+</html>
