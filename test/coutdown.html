@@ -11,25 +11,29 @@
         background-color: #20262e;
       }
 
-      .display {
-        width: 90px;
-        height: 90px;
+      :root {
+        --die-width: 120px;
+        --die-height: 100px;
+      }
+
+      .container {
+        width: var(--die-width);
+        height: calc(var(--die-height) + 10px);
         margin: 0px auto 0px auto;
         padding: 10px 0px 10px 0px;
 
         font-family: Comic Sans MS;
-        font-size: 20px;
+        font-size: calc(var(--die-height) / 2);
         color: #fff;
         cursor: default;
         text-align: center;
-        line-height: 40px;
+        line-height: var(--die-height);
         border-radius: 10px;
-        cursor: default;
       }
 
       .symbol {
-        width: 90px;
-        height: 50px;
+        width: var(--die-width);
+        height: calc(var(--die-height) + 10px);
         float: left;
         overflow: hidden;
       }
@@ -37,27 +41,47 @@
       .cur,
       .old {
         width: 92%;
-        height: 40px;
+        height: var(--die-height);
         float: left;
         background-color: #3f51b5;
         border-radius: 3px;
         margin: 5px 1px;
-        transform: translateY(-50px);
+        transform: translateY(calc((var(--die-height) + 10px) * -1));
         box-shadow: inset 1px 1px 3px 0px rgba(255, 255, 255, 0.5);
       }
       .symbol.anim div {
         transform: translateY(0px);
-        transition: transform 0.35s ease-in-out;
+        transition: transform 0.2s ease-in-out;
+      }
+
+      .wrapper {
+        margin: 0px auto 0px auto;
+        text-align: center;
+      }
+
+      .wrapper button {
+        font-size: 32px;
+        cursor: pointer;
+        transition: opacity 0.2s ease-in-out;
+      }
+
+      .hide {
+        opacity: 0;
+        cursor: progress;
       }
     </style>
   </head>
   <body>
-    <div class="display" id="a">
+    <div class="container" id="roller">
       <div class="symbol">
         <div class="cur"></div>
-        <div class="old"></div>
+        <div class="old">6</div>
       </div>
     </div>
+    <div class="wrapper">
+      <button data-js-hook="roll-button">Roll</button>
+    </div>
+
     <script>
       const rollFn = (dieSides = 6) => () =>
         1 + Math.floor(Math.random() * dieSides);
@@ -78,7 +102,7 @@
 
         return seq;
       }
-      function countdown(elements, displayElem, onTimerEnd = null) {
+      function animateSequence(elements, displayElem, onTimerEnd = null) {
         console.log(`Sequence = ${elements.join(",")}`);
         let index = 0;
         let timer = setInterval(function () {
@@ -90,7 +114,7 @@
           }
           updateDisplay(elements[index], elements[index + 1]);
           index += 1;
-        }, 500);
+        }, 333);
 
         function updateDisplay(currentValue, newValue) {
           const sym = displayElem.querySelector(".symbol .cur");
@@ -106,7 +130,27 @@
         }
       }
 
-      countdown(rollSequence(), document.getElementById("a"));
+      function setupButton() {
+        const el = document.querySelector("[data-js-hook=roll-button]");
+        let running = false;
+
+        function toggleButton() {
+          el.classList.toggle("hide");
+          running = !running;
+        }
+
+        el.onclick = () => {
+          if (running) return;
+          animateSequence(
+            rollSequence(),
+            document.getElementById("roller"),
+            toggleButton
+          );
+          toggleButton();
+        };
+      }
+
+      window.onload = setupButton;
     </script>
   </body>
 </html>

@@ -5,30 +5,81 @@
     <script src="https://miro.com/app/static/sdk.1.1.js"></script>
 
     <style>
-      .container {
-        width: 640px;
-        height: 400px;
-      }
-      .rtb-sidebar-caption {
-        font-size: 14px;
-        font-weight: bold;
-        color: rgba(0, 0, 0, 0.8);
-        padding: 24px 0 0 24px;
+      body {
+        margin: 0;
       }
 
-      .tip {
-        color: #cccccc;
-        margin: 20px 0 0 26px;
+      :root {
+        --die-width: 120px;
+        --die-height: 100px;
+      }
+
+      .container {
+        width: var(--die-width);
+        height: calc(var(--die-height) + 10px);
+        margin: 0px auto 0px auto;
+        padding: 10px 0px 10px 0px;
+
+        font-family: Comic Sans MS;
+        font-size: calc(var(--die-height) / 2);
+        color: #fff;
+        cursor: default;
+        text-align: center;
+        line-height: var(--die-height);
+        border-radius: 10px;
+      }
+
+      .symbol {
+        width: var(--die-width);
+        height: calc(var(--die-height) + 10px);
+        float: left;
+        overflow: hidden;
+      }
+
+      .cur,
+      .old {
+        width: 92%;
+        height: var(--die-height);
+        float: left;
+        background-color: #3f51b5;
+        border-radius: 3px;
+        margin: 5px 1px;
+        transform: translateY(calc((var(--die-height) + 10px) * -1));
+        box-shadow: inset 1px 1px 3px 0px rgba(255, 255, 255, 0.5);
+      }
+      .symbol.anim div {
+        transform: translateY(0px);
+        transition: transform 0.2s ease-in-out;
+      }
+
+      .wrapper {
+        margin: 0px auto 0px auto;
+        text-align: center;
+      }
+
+      .wrapper button {
+        font-size: 32px;
+        cursor: pointer;
+        transition: opacity 0.2s ease-in-out;
+      }
+
+      .hide {
+        opacity: 0;
+        cursor: progress;
       }
     </style>
   </head>
 
   <body>
-    <div class="container">
-      <div class="rtb-sidebar-caption">Roll a dice</div>
-      <div class="tip" id="tip"></div>
+    <div class="container" id="roller">
+      <div class="symbol">
+        <div class="cur"></div>
+        <div class="old">1</div>
+      </div>
     </div>
-
+    <div class="wrapper">
+      <button data-js-hook="roll-button">Roll</button>
+    </div>
     <script src="dice.js"></script>
   </body>
 </html>
