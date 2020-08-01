@@ -2,6 +2,12 @@
 
 A simple 6-sided die add on for Miro.
 
+## Installation
+
+Simply open this URL to add Miro Dice to your board.
+
+https://miro.com/oauth/authorize/?response_type=token&client_id=3074457349061067380&redirect_uri=https://vibrant-hopper-abeb0d.netlify.app/auth-success.html
+
 ## Acknowledgements
 
 Heavily inspired by [this JSFiddle](https://jsfiddle.net/Stalk/5u6dmpqs/)
