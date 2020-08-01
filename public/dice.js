@@ -2,7 +2,7 @@ const rollFn = (dieSides = 6) => () => 1 + Math.floor(Math.random() * dieSides);
 
 const last = (arr) => arr[arr.length - 1];
 
-function rollSequence(dieSides = 6, minRolls = 5, maxRolls = 10) {
+function rollSequence(dieSides = 6, minRolls = 3, maxRolls = 6) {
   const amtRolls = 1 + Math.floor(Math.random() * maxRolls) + minRolls;
   const roll = rollFn(dieSides);
   const seq = [roll()];
